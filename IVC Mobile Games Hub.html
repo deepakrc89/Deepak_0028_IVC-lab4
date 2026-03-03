@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)http://127.0.0.1:5500/IVC.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Games Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 200, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 150, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0ff;
+        }
+        
+        header {
+            text-align: center;
+            color: #00ffff;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff, 0 0 30px #00ffff;
+            letter-spacing: 2px;
+        }
+        
+        header p {
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+            font-size: 1.1em;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(15, 20, 40, 0.8);
+            border-radius: 15px;
+            border: 2px solid #00ffff;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                0 0 60px rgba(255, 0, 150, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            padding: 30px;
+            min-height: 600px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .game-card {
+            background: linear-gradient(135deg, rgba(0, 255, 200, 0.1) 0%, rgba(255, 0, 150, 0.1) 100%);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.3);
+            backdrop-filter: blur(5px);
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: 10px;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 
+                0 0 25px rgba(0, 255, 200, 0.6),
+                0 0 40px rgba(255, 0, 150, 0.4),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: #ff00ff;
+        }
+        
+        .game-card h3 {
+            margin-bottom: 10px;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .game-card:hover h3 {
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+        }
+        
+        .game-card p {
+            font-size: 0.9em;
+            color: #b0b0ff;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .game-card:hover p {
+            color: #00ffff;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .pagination button {
+            padding: 10px 15px;
+            border: 2px solid #00ffff;
+            background: rgba(0, 255, 255, 0.05);
+            color: #00ffff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+        
+        .pagination button:hover {
+            background: rgba(255, 0, 150, 0.2);
+            border-color: #ff00ff;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+            box-shadow: 
+                0 0 15px rgba(255, 0, 150, 0.5),
+                inset 0 0 10px rgba(255, 0, 150, 0.2);
+        }
+        
+        .pagination button.active {
+            background: rgba(255, 0, 150, 0.3);
+            border-color: #ff00ff;
+            color: #ff00ff;
+            font-weight: bold;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 150, 0.6),
+                inset 0 0 10px rgba(255, 0, 150, 0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(15, 20, 40, 0.95) 0%, rgba(20, 15, 40, 0.95) 100%);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid #00ffff;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                0 0 60px rgba(255, 0, 150, 0.3);
+        }
+        
+        .close {
+            color: #00ffff;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            text-shadow: 0 0 10px #00ffff;
+            transition: all 0.3s ease;
+        }
+        
+        .close:hover {
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        
+        .modal h2 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .modal h3 {
+            color: #ff00ff;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px #ff00ff;
+        }
+        
+        .modal p, .modal li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: #b0b0ff;
+        }
+        
+        .modal ul {
+            margin-left: 20px;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #00ffff;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            font-family: inherit;
+            background: rgba(0, 255, 200, 0.05);
+            color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 200, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ff00ff;
+            background: rgba(255, 0, 150, 0.1);
+            color: #ff00ff;
+            box-shadow: 0 0 15px rgba(255, 0, 150, 0.4);
+            outline: none;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .submit-btn {
+            background: rgba(0, 255, 255, 0.2);
+            color: #00ffff;
+            padding: 10px 20px;
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.3);
+        }
+        
+        .submit-btn:hover {
+            background: rgba(255, 0, 150, 0.3);
+            color: #ff00ff;
+            border-color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 150, 0.5);
+        }
+        
+        .page-title {
+            font-size: 1.5em;
+            color: #00ffff;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 15px #00ffff, 0 0 25px #ff00ff;
+            letter-spacing: 1px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎮 Mobile Games Hub</h1>
+        <p>Explore game rules and requirements</p>
+    </header>
+    
+    <div class="container">
+        <div id="gamesContent" class="">
+            <div class="page-title" id="pageTitle">Games - Page 1 (1-25)</div>
+            <div class="games-grid" id="gamesGrid"><div class="game-card">
+                            <h3>PUBG Mobile</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Call of Duty Mobile</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Clash of Clans</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Candy Crush Saga</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Fortnite</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Among Us</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Genshin Impact</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Dota 2</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Clash Royale</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Free Fire</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Minecraft</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Roblox</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Temple Run</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Angry Birds</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Subway Surfers</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>ALTO's Adventure</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Pokémon GO</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Clash Quest</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Brawl Stars</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Supercell's Boom Beach</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Plants vs Zombies</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Asphalt 9</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Need for Speed No Limits</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Stardew Valley</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div><div class="game-card">
+                            <h3>Monument Valley</h3>
+                            <p>Click to view rules &amp; requirements</p>
+                        </div></div>
+        </div>
+        
+        <div id="enquiryForm" class="form-section">
+            <h2 style="color: #00ffff; text-shadow: 0 0 10px #00ffff;">Game Enquiry Form</h2>
+            <p style="color: #ff00ff; text-shadow: 0 0 5px #ff00ff;">Can't find your game? Let us know!</p>
+            <form onsubmit="submitEnquiry(event)">
+                <div class="form-group">
+                    <label for="gameName">Game Name:</label>
+                    <input type="text" id="gameName" required="">
+                </div>
+                <div class="form-group">
+                    <label for="gameGenre">Game Genre:</label>
+                    <input type="text" id="gameGenre" required="">
+                </div>
+                <div class="form-group">
+                    <label for="platform">Platform:</label>
+                    <input type="text" id="platform" value="Mobile" required="">
+                </div>
+                <div class="form-group">
+                    <label for="yourName">Your Name:</label>
+                    <input type="text" id="yourName" required="">
+                </div>
+                <div class="form-group">
+                    <label for="yourEmail">Your Email:</label>
+                    <input type="email" id="yourEmail" required="">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" placeholder="Tell us about the game..." required=""></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit Enquiry</button>
+            </form>
+        </div>
+        
+        <div class="pagination" id="pagination"><button class="active">Page 1</button><button class="">Page 2</button><button class="">Page 3</button><button class="">Page 4</button><button class="">Page 5</button></div>
+    </div>
+    
+    <div id="gameModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h2 id="modalGameName">Free Fire</h2>
+            <h3>Rules:</h3>
+            <p id="modalRules">Battle royale with 50 players dropping on an island with limited time.</p>
+            <h3>Requirements:</h3>
+            <ul id="modalRequirements"><li>2GB RAM</li><li>1GB Storage</li><li>Internet connection</li><li>Android 4.4+ / iOS 8+</li></ul>
+        </div>
+    </div>
+
+    <script>
+        const gamesData = [
+            {
+                id: 1,
+                name: "PUBG Mobile",
+                rules: "Battle royale game where 100 players fight until one survives. Last player wins.",
+                requirements: ["4GB RAM", "2GB Storage", "High-speed internet", "Android 5.1+ / iOS 9+"]
+            },
+            {
+                id: 2,
+                name: "Call of Duty Mobile",
+                rules: "Multiplayer shooter featuring team-based matches and solo battle royale mode.",
+                requirements: ["2GB RAM", "1.5GB Storage", "Internet connection", "Android 6.0+ / iOS 9+"]
+            },
+            {
+                id: 3,
+                name: "Clash of Clans",
+                rules: "Strategic building game where you construct villages and battle other players.",
+                requirements: ["1GB RAM", "500MB Storage", "Internet connection", "Android 4.1+ / iOS 8+"]
+            },
+            {
+                id: 4,
+                name: "Candy Crush Saga",
+                rules: "Match 3 puzzle game with multiple game modes and power-ups.",
+                requirements: ["1GB RAM", "100MB Storage", "Internet connection", "Android 4.0+ / iOS 7+"]
+            },
+            {
+                id: 5,
+                name: "Fortnite",
+                rules: "100-player battle royale with building mechanics and weekly challenges.",
+                requirements: ["4GB RAM", "2.5GB Storage", "High-speed internet", "Android 8.0+ / iOS 11+"]
+            },
+            {
+                id: 6,
+                name: "Among Us",
+                rules: "Social deduction game where impostors must avoid detection while completing tasks.",
+                requirements: ["2GB RAM", "200MB Storage", "Internet connection", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 7,
+                name: "Genshin Impact",
+                rules: "Open-world action RPG with exploration, puzzles, and combat systems.",
+                requirements: ["4GB RAM", "3GB Storage", "High-speed internet", "Android 8.0+ / iOS 9+"]
+            },
+            {
+                id: 8,
+                name: "Dota 2",
+                rules: "MOBA game with 5v5 team battles focusing on strategy and character abilities.",
+                requirements: ["3GB RAM", "2GB Storage", "High-speed internet", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 9,
+                name: "Clash Royale",
+                rules: "Card-based strategy game with real-time 1v1 or 2v2 battles.",
+                requirements: ["1GB RAM", "300MB Storage", "Internet connection", "Android 4.1+ / iOS 8+"]
+            },
+            {
+                id: 10,
+                name: "Free Fire",
+                rules: "Battle royale with 50 players dropping on an island with limited time.",
+                requirements: ["2GB RAM", "1GB Storage", "Internet connection", "Android 4.4+ / iOS 8+"]
+            },
+            {
+                id: 11,
+                name: "Minecraft",
+                rules: "Sandbox game with creative and survival modes for building and exploration.",
+                requirements: ["2GB RAM", "750MB Storage", "Optional internet", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 12,
+                name: "Roblox",
+                rules: "User-generated content platform with various games created by community members.",
+                requirements: ["2GB RAM", "600MB Storage", "Internet connection", "Android 6.0+ / iOS 10.0+"]
+            },
+            {
+                id: 13,
+                name: "Temple Run",
+                rules: "Endless runner game collecting coins while avoiding obstacles and enemies.",
+                requirements: ["512MB RAM", "50MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 14,
+                name: "Angry Birds",
+                rules: "Physics puzzle game launching birds to destroy pigs and structures.",
+                requirements: ["512MB RAM", "70MB Storage", "Optional internet", "Android 4.0+ / iOS 5+"]
+            },
+            {
+                id: 15,
+                name: "Subway Surfers",
+                rules: "Endless runner collecting coins while dodging trains and obstacles.",
+                requirements: ["1GB RAM", "80MB Storage", "Internet connection", "Android 4.1+ / iOS 7+"]
+            },
+            {
+                id: 16,
+                name: "ALTO's Adventure",
+                rules: "Endless runner with minimalist design and peaceful gameplay mechanics.",
+                requirements: ["512MB RAM", "100MB Storage", "Optional internet", "Android 4.0+ / iOS 7+"]
+            },
+            {
+                id: 17,
+                name: "Pokémon GO",
+                rules: "Location-based AR game catching Pokémon in real-world locations.",
+                requirements: ["2GB RAM", "200MB Storage", "GPS + Internet", "Android 5.0+ / iOS 11+"]
+            },
+            {
+                id: 18,
+                name: "Clash Quest",
+                rules: "Puzzle-tactical game combining movement puzzles with Clash universe.",
+                requirements: ["1GB RAM", "400MB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 19,
+                name: "Brawl Stars",
+                rules: "Fast-paced multiplayer game with 3v3 team battles in various modes.",
+                requirements: ["1.5GB RAM", "400MB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 20,
+                name: "Supercell's Boom Beach",
+                rules: "Strategic combat game attacking enemy bases and building your own island.",
+                requirements: ["2GB RAM", "500MB Storage", "Internet connection", "Android 4.1+ / iOS 8+"]
+            },
+            {
+                id: 21,
+                name: "Plants vs Zombies",
+                rules: "Tower defense game placing plants to defend against zombie waves.",
+                requirements: ["1GB RAM", "200MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 22,
+                name: "Asphalt 9",
+                rules: "Arcade racing game with exotic cars and multiplayer racing events.",
+                requirements: ["3GB RAM", "1.5GB Storage", "Internet connection", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 23,
+                name: "Need for Speed No Limits",
+                rules: "Open-world racing game with customization and street racing challenges.",
+                requirements: ["2.5GB RAM", "1.2GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 24,
+                name: "Stardew Valley",
+                rules: "Agricultural simulation RPG with farming, fishing, and relationship building.",
+                requirements: ["1GB RAM", "250MB Storage", "Optional internet", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 25,
+                name: "Monument Valley",
+                rules: "Isometric puzzle adventure game with perspective-based challenges.",
+                requirements: ["1GB RAM", "300MB Storage", "Optional internet", "Android 4.0+ / iOS 7+"]
+            },
+            {
+                id: 26,
+                name: "Hearthstone",
+                rules: "Digital turn-based card game with deck building and strategic gameplay.",
+                requirements: ["2GB RAM", "1GB Storage", "Internet connection", "Android 5.0+ / iOS 8+"]
+            },
+            {
+                id: 27,
+                name: "Magic: The Gathering Arena",
+                rules: "Digital collectible card game with turn-based combat and deck customization.",
+                requirements: ["2.5GB RAM", "1.2GB Storage", "Internet connection", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 28,
+                name: "Legends of Runeterra",
+                rules: "Strategic card game with spell casting and unit deployment mechanics.",
+                requirements: ["2GB RAM", "1GB Storage", "Internet connection", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 29,
+                name: "Twitch",
+                rules: "Streaming platform to watch and broadcast mobile gaming content.",
+                requirements: ["1.5GB RAM", "300MB Storage", "High-speed internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 30,
+                name: "YouTube Gaming",
+                rules: "Watch gaming videos and streams from various content creators.",
+                requirements: ["1GB RAM", "100MB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 31,
+                name: "Dragon Ball Legends",
+                rules: "Action RPG game featuring Dragon Ball characters in card-based battles.",
+                requirements: ["2.5GB RAM", "1.2GB Storage", "Internet connection", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 32,
+                name: "One Piece Treasure Cruise",
+                rules: "Puzzle-based RPG with One Piece characters and match-3 mechanics.",
+                requirements: ["1.5GB RAM", "500MB Storage", "Internet connection", "Android 4.4+ / iOS 8+"]
+            },
+            {
+                id: 33,
+                name: "Naruto Ninja Voltage",
+                rules: "Base defense game with Naruto characters and tactical building.",
+                requirements: ["2GB RAM", "700MB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 34,
+                name: "Final Fantasy XV: A New Empire",
+                rules: "Empire building and kingdom defense game set in Final Fantasy universe.",
+                requirements: ["2GB RAM", "800MB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 35,
+                name: "Fate/Grand Order",
+                rules: "Turn-based RPG with card mechanics and historical/legendary servants.",
+                requirements: ["2GB RAM", "1GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 36,
+                name: "Honkai Impact 3rd",
+                rules: "Action RPG with fast-paced combat and multiple playable characters.",
+                requirements: ["3GB RAM", "1.5GB Storage", "Internet connection", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 37,
+                name: "Soul Knight",
+                rules: "Dungeon crawler with pixel art style featuring roguelike elements.",
+                requirements: ["1.5GB RAM", "400MB Storage", "Optional internet", "Android 4.0+ / iOS 7+"]
+            },
+            {
+                id: 38,
+                name: "Cell Phone Tycoon",
+                rules: "Management sim building a mobile phone company from scratch.",
+                requirements: ["1GB RAM", "200MB Storage", "Optional internet", "Android 4.0+ / iOS 7+"]
+            },
+            {
+                id: 39,
+                name: "Two Dots",
+                rules: "Connect dots puzzle game with minimalist design and increasing difficulty.",
+                requirements: ["512MB RAM", "50MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 40,
+                name: "Flow Free",
+                rules: "Pipe connecting puzzle where you match colored dots with flowing lines.",
+                requirements: ["512MB RAM", "30MB Storage", "Optional internet", "Android 2.3+ / iOS 5+"]
+            },
+            {
+                id: 41,
+                name: "Threes!",
+                rules: "Sliding tile puzzle game combining numbers to reach higher values.",
+                requirements: ["512MB RAM", "20MB Storage", "Optional internet", "Android 2.3+ / iOS 5+"]
+            },
+            {
+                id: 42,
+                name: "2048",
+                rules: "Sliding tile puzzle merging numbered tiles to create the 2048 tile.",
+                requirements: ["512MB RAM", "10MB Storage", "Optional internet", "Android 2.3+ / iOS 5+"]
+            },
+            {
+                id: 43,
+                name: "Tetris Effect Connected",
+                rules: "Block-falling puzzle game with cooperative and competitive multiplayer.",
+                requirements: ["1.5GB RAM", "500MB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 44,
+                name: "Puzzle Quest 3",
+                rules: "Match-3 puzzle RPG with character progression and story campaign.",
+                requirements: ["1.5GB RAM", "600MB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 45,
+                name: "King's Bounty II",
+                rules: "Turn-based strategy RPG with exploration and tactical combat.",
+                requirements: ["2GB RAM", "1.2GB Storage", "Optional internet", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 46,
+                name: "Langrisser I & II",
+                rules: "Turn-based tactical RPG with branching storylines and multiple routes.",
+                requirements: ["2.5GB RAM", "1.5GB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 47,
+                name: "Fire Emblem Heroes",
+                rules: "Tactical RPG featuring characters from Fire Emblem series.",
+                requirements: ["1.5GB RAM", "1GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 48,
+                name: "Summoners War",
+                rules: "Creature collection RPG with dungeon exploration and PvP battles.",
+                requirements: ["2GB RAM", "1GB Storage", "Internet connection", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 49,
+                name: "Puzzle & Dragons",
+                rules: "Match-3 puzzle combat game with monster collection elements.",
+                requirements: ["1.5GB RAM", "500MB Storage", "Internet connection", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 50,
+                name: "Fishing Clash",
+                rules: "Fishing simulation game competing against other players for big catches.",
+                requirements: ["1.5GB RAM", "400MB Storage", "Internet connection", "Android 4.4+ / iOS 9+"]
+            },
+            {
+                id: 51,
+                name: "Simcity BuildIt",
+                rules: "City building simulator managing residents, services, and infrastructure.",
+                requirements: ["1.5GB RAM", "1.2GB Storage", "Internet connection", "Android 4.3+ / iOS 9+"]
+            },
+            {
+                id: 52,
+                name: "My Talking Tom",
+                rules: "Virtual pet game feeding, playing, and grooming an animated cat.",
+                requirements: ["1GB RAM", "200MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 53,
+                name: "Tamagotchi Nano",
+                rules: "Digital pet care game requiring attention and maintenance.",
+                requirements: ["512MB RAM", "50MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 54,
+                name: "Hay Day",
+                rules: "Farm management game with crops, animals, and trading mechanics.",
+                requirements: ["1.5GB RAM", "600MB Storage", "Internet connection", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 55,
+                name: "Farmville 3",
+                rules: "Agricultural simulation with crop growing and animal husbandry.",
+                requirements: ["1.5GB RAM", "800MB Storage", "Internet connection", "Android 4.4+ / iOS 9+"]
+            },
+            {
+                id: 56,
+                name: "Cookie Clicker",
+                rules: "Incremental clicker game gaining cookies and purchasing upgrades.",
+                requirements: ["512MB RAM", "20MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 57,
+                name: "Idle Tycoon",
+                rules: "Idle management game automatically generating income with upgrades.",
+                requirements: ["1GB RAM", "300MB Storage", "Optional internet", "Android 4.0+ / iOS 7+"]
+            },
+            {
+                id: 58,
+                name: "Granny",
+                rules: "Survival horror game escaping from an angry grandmother's house.",
+                requirements: ["1GB RAM", "400MB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 59,
+                name: "Resident Evil 4 Mobile Edition",
+                rules: "Third-person action game shooting enemies and solving puzzles.",
+                requirements: ["2GB RAM", "1.2GB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 60,
+                name: "Left 4 Dead 2",
+                rules: "Cooperative zombie survival game fighting waves of undead.",
+                requirements: ["2GB RAM", "1GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 61,
+                name: "Into The Dead",
+                rules: "Zombie apocalypse runner game fighting and escaping undead.",
+                requirements: ["1.5GB RAM", "500MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 62,
+                name: "Plants vs Zombies 2",
+                rules: "Tower defense game with new plants, levels, and special abilities.",
+                requirements: ["1.5GB RAM", "400MB Storage", "Internet connection", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 63,
+                name: "Badland",
+                rules: "Side-scrolling action game navigating through deadly forest obstacles.",
+                requirements: ["1GB RAM", "300MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 64,
+                name: "Leo's Fortune",
+                rules: "Platformer puzzle game with adorable character collecting coins.",
+                requirements: ["1GB RAM", "250MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 65,
+                name: "Jump Rope Challenge",
+                rules: "Casual game improving jump rope skills with increasing difficulty.",
+                requirements: ["512MB RAM", "50MB Storage", "Optional internet", "Android 5.0+ / iOS 8+"]
+            },
+            {
+                id: 66,
+                name: "Fall Guys Mobile",
+                rules: "Battle royale with silly physics and obstacle course challenges.",
+                requirements: ["3GB RAM", "1.5GB Storage", "Internet connection", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 67,
+                name: "Apex Legends Mobile",
+                rules: "Tactical team-based battle royale with hero abilities.",
+                requirements: ["3GB RAM", "1.5GB Storage", "Internet connection", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 68,
+                name: "Overwatch 2 Mobile",
+                rules: "Team-based hero shooter with diverse characters and game modes.",
+                requirements: ["3GB RAM", "1.8GB Storage", "Internet connection", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 69,
+                name: "Valorant Mobile",
+                rules: "Tactical 5v5 shooter combining skills and team strategy.",
+                requirements: ["3GB RAM", "1.5GB Storage", "High-speed internet", "Android 6.0+ / iOS 11+"]
+            },
+            {
+                id: 70,
+                name: "CS:GO Mobile",
+                rules: "Objective-based tactical shooter planting/defusing bombs.",
+                requirements: ["3GB RAM", "1.6GB Storage", "High-speed internet", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 71,
+                name: "League of Legends Wild Rift",
+                rules: "MOBA game 5v5 destroying enemy towers and base.",
+                requirements: ["2.5GB RAM", "1.5GB Storage", "Internet connection", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 72,
+                name: "Heroes of the Storm Mobile",
+                rules: "MOBA featuring Blizzard universe characters in team battles.",
+                requirements: ["2GB RAM", "1.2GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 73,
+                name: "Vainglory",
+                rules: "MOBA with 3v3 and 5v5 modes with skill-based gameplay.",
+                requirements: ["2GB RAM", "1.5GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 74,
+                name: "Mobius Final Fantasy",
+                rules: "Action RPG set in Final Fantasy world with card-based abilities.",
+                requirements: ["2GB RAM", "1.2GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 75,
+                name: "Dissidia Final Fantasy",
+                rules: "Fighting game featuring Final Fantasy characters in combat.",
+                requirements: ["2.5GB RAM", "1.5GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 76,
+                name: "Final Fantasy Brave Exvius",
+                rules: "Turn-based RPG with summonable characters and world-wide events.",
+                requirements: ["1.5GB RAM", "1GB Storage", "Internet connection", "Android 4.4+ / iOS 8+"]
+            },
+            {
+                id: 77,
+                name: "Langrisser Mobile",
+                rules: "Tactical RPG mobilized with turn-based strategic combat.",
+                requirements: ["2GB RAM", "1.2GB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 78,
+                name: "Yggdrasil Chronicles",
+                rules: "Roguelike dungeon crawler with Norse mythology setting.",
+                requirements: ["2GB RAM", "1GB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 79,
+                name: "Hades",
+                rules: "Roguelike action game escaping underworld with permanent progression.",
+                requirements: ["2.5GB RAM", "1.5GB Storage", "Optional internet", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 80,
+                name: "Dead Cells",
+                rules: "Roguelike action game with procedural level generation.",
+                requirements: ["2GB RAM", "800MB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 81,
+                name: "Risk of Rain 2",
+                rules: "Action roguelike with bullet-hell elements and multiplayer.",
+                requirements: ["2.5GB RAM", "2GB Storage", "Optional internet", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 82,
+                name: "Gunfire Reborn",
+                rules: "FPS roguelike with boss battles and weapon variations.",
+                requirements: ["2GB RAM", "1.5GB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 83,
+                name: "Slay The Spire",
+                rules: "Deck-building roguelike playing cards in turn-based battles.",
+                requirements: ["1.5GB RAM", "500MB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 84,
+                name: "Inscryption",
+                rules: "Deck-building game with card mechanics and puzzle elements.",
+                requirements: ["2GB RAM", "1.2GB Storage", "Optional internet", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 85,
+                name: "Darkest Dungeon",
+                rules: "Tactical dungeon crawler with permadeath and stress mechanics.",
+                requirements: ["1.5GB RAM", "1GB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 86,
+                name: "Hollow Knight",
+                rules: "Metroidvania platformer exploring a kingdom of bugs.",
+                requirements: ["2GB RAM", "1.2GB Storage", "Optional internet", "Android 5.0+ / iOS 10+"]
+            },
+            {
+                id: 87,
+                name: "Celeste",
+                rules: "Platformer game climbing mountain with challenging physics.",
+                requirements: ["512MB RAM", "300MB Storage", "Optional internet", "Android 5.0+ / iOS 9+"]
+            },
+            {
+                id: 88,
+                name: "Super Meat Boy",
+                rules: "Platformer with tight controls and pixel-perfect jumps.",
+                requirements: ["1GB RAM", "300MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 89,
+                name: "Icy Tower",
+                rules: "Arcade platformer jumping up tower avoiding obstacles.",
+                requirements: ["512MB RAM", "50MB Storage", "Optional internet", "Android 4.0+ / iOS 5+"]
+            },
+            {
+                id: 90,
+                name: "Flappy Bird",
+                rules: "Casual game flying bird through pipes avoiding collisions.",
+                requirements: ["512MB RAM", "30MB Storage", "Optional internet", "Android 2.3+ / iOS 5+"]
+            },
+            {
+                id: 91,
+                name: "Geometry Dash",
+                rules: "Rhythm platformer syncing jumps to electronic music.",
+                requirements: ["1GB RAM", "200MB Storage", "Optional internet", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 92,
+                name: "Piano Tiles",
+                rules: "Rhythm game tapping tiles in time with music.",
+                requirements: ["512MB RAM", "50MB Storage", "Optional internet", "Android 4.0+ / iOS 5+"]
+            },
+            {
+                id: 93,
+                name: "Beat Saber Mobile",
+                rules: "Rhythm VR game slashing blocks to music with sabers.",
+                requirements: ["2GB RAM", "1.5GB Storage", "Optional internet", "Android 6.0+ / iOS 10+"]
+            },
+            {
+                id: 94,
+                name: "Just Dance Now",
+                rules: "Dance game following on-screen dance moves.",
+                requirements: ["1.5GB RAM", "500MB Storage", "Internet connection", "Android 4.0+ / iOS 7+"]
+            },
+            {
+                id: 95,
+                name: "Osu! Stream",
+                rules: "Music rhythm game tapping circles and sliders.",
+                requirements: ["1GB RAM", "300MB Storage", "Internet connection", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 96,
+                name: "Arcaea",
+                rules: "Rhythm game with futuristic design and challenging charts.",
+                requirements: ["1.5GB RAM", "500MB Storage", "Internet connection", "Android 4.4+ / iOS 8+"]
+            },
+            {
+                id: 97,
+                name: "Cytus",
+                rules: "Sci-fi rhythm game touching notes and circles to music.",
+                requirements: ["1.5GB RAM", "700MB Storage", "Internet connection", "Android 4.0+ / iOS 6+"]
+            },
+            {
+                id: 98,
+                name: "Deemo",
+                rules: "Piano rhythm game playing notes in a mysterious setting.",
+                requirements: ["1GB RAM", "500MB Storage", "Internet connection", "Android 4.1+ / iOS 6+"]
+            },
+            {
+                id: 99,
+                name: "Voez",
+                rules: "Vertical rhythm game swiping notes in beat with music.",
+                requirements: ["1.5GB RAM", "1GB Storage", "Internet connection", "Android 4.4+ / iOS 8+"]
+            },
+            {
+                id: 100,
+                name: "SuperStar SM",
+                rules: "Music rhythm game unlocking K-pop songs and cards.",
+                requirements: ["2GB RAM", "500MB Storage", "Internet connection", "Android 5.0+ / iOS 9+"]
+            }
+        ];
+
+        const gamesPerPage = 25;
+        let currentPage = 1;
+        const totalPages = 5;
+
+        function getGamesForPage(pageNum) {
+            const startIdx = (pageNum - 1) * gamesPerPage;
+            if (pageNum === 5) {
+                return null;
+            }
+            return gamesData.slice(startIdx, startIdx + gamesPerPage);
+        }
+
+        function renderGames(pageNum) {
+            const gamesGrid = document.getElementById('gamesGrid');
+            const pageTitle = document.getElementById('pageTitle');
+            const gamesContent = document.getElementById('gamesContent');
+            const enquiryForm = document.getElementById('enquiryForm');
+
+            if (pageNum === 5) {
+                gamesContent.classList.add('hidden');
+                enquiryForm.classList.add('active');
+                pageTitle.textContent = 'Game Enquiry Form';
+            } else {
+                gamesContent.classList.remove('hidden');
+                enquiryForm.classList.remove('active');
+                const games = getGamesForPage(pageNum);
+                if (games) {
+                    const startNum = (pageNum - 1) * gamesPerPage + 1;
+                    const endNum = startNum + games.length - 1;
+                    pageTitle.textContent = `Games - Page ${pageNum} (${startNum}-${endNum})`;
+                }
+                
+                gamesGrid.innerHTML = '';
+                if (games) {
+                    games.forEach(game => {
+                        const card = document.createElement('div');
+                        card.className = 'game-card';
+                        card.innerHTML = `
+                            <h3>${game.name}</h3>
+                            <p>Click to view rules & requirements</p>
+                        `;
+                        card.onclick = () => openModal(game);
+                        gamesGrid.appendChild(card);
+                    });
+                }
+            }
+            currentPage = pageNum;
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = `Page ${i}`;
+                btn.className = i === currentPage ? 'active' : '';
+                btn.onclick = () => renderGames(i);
+                pagination.appendChild(btn);
+            }
+        }
+
+        function openModal(game) {
+            const modal = document.getElementById('gameModal');
+            document.getElementById('modalGameName').textContent = game.name;
+            document.getElementById('modalRules').textContent = game.rules;
+            const requirementsList = document.getElementById('modalRequirements');
+            requirementsList.innerHTML = '';
+            game.requirements.forEach(req => {
+                const li = document.createElement('li');
+                li.textContent = req;
+                requirementsList.appendChild(li);
+            });
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('gameModal').style.display = 'none';
+        }
+
+        function submitEnquiry(event) {
+            event.preventDefault();
+            const name = document.getElementById('gameName').value;
+            alert(`Thank you for your enquiry about "${name}"! We'll review it soon.`);
+            event.target.reset();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('gameModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        renderGames(1);
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+</body></html>
